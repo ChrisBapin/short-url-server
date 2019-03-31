@@ -8,8 +8,12 @@ const Url = mongoose.model("Url", {
   shortUrl: {
     type: String,
   },
+  baseShortUrl: {
+    type: String,
+  },
   visit: {
     type: String,
+    default: 0,
   },
   hash: String,
   salt: String,

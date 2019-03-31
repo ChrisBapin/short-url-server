@@ -3,23 +3,20 @@ const cors = require("cors");
 const router = express.Router();
 const body_parser = require("body-parser");
 router.use(body_parser.json(), cors());
-const SHA256 = require("crypto-js/sha256");
-const encBase64 = require("crypto-js/enc-base64");
 const uid2 = require("uid2");
 
 const Url = require("../models/urlModel");
 
 // Create url
-router.post("/create_url", async (req, res) => {
+router.post("/create_url/", async (req, res) => {
   try {
     const salt = uid2(5);
-    const hash = SHA256(salt).toString(encBase64);
 
     const url = new Url({
       longUrl: req.body.longUrl,
       shortUrl: salt,
+      baseShortUrl: "http://localhost:3000/" + salt,
       visit: req.body.visit,
-      hash: hash,
       salt: salt,
     });
 
@@ -29,22 +26,46 @@ router.post("/create_url", async (req, res) => {
       id: url._id,
       longUrl: url.longUrl,
       shortUrl: url.shortUrl,
+      baseShortUrl: url.baseShortUrl,
       visit: url.visit,
-      hash: url.hash,
       salt: url.salt,
     });
+
+    console.log(baseShortUrl);
   } catch (error) {
     res.json({ message: error.message });
   }
 });
 
 // Read url
-router.get("/get_url", async (req, res) => {
+router.get("/get_url/", async (req, res) => {
   try {
     const url = await Url.find();
     res.json(url);
   } catch (error) {
     res.json({ message: error.message });
+  }
+});
+
+// Update visits
+router.post("/update_url/:shortUrl", async (req, res) => {
+  try {
+    // 1) Récupérer l'objet à modifier depuis la base mongodb
+    const url = await Url.findOne({ shortUrl: req.params.shortUrl });
+    await console.log(url);
+    if (url) {
+      // 2) Modifier l'objet
+
+      url.visit = req.body.visit;
+
+      // 3) Sauvegarder l'objet modifié
+      await url.save();
+      res.json(url);
+    } else {
+      console.log("ko");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 });
 
