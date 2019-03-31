@@ -6,6 +6,8 @@ router.use(body_parser.json(), cors());
 const uid2 = require("uid2");
 
 const Url = require("../models/urlModel");
+let deploy = "https://short-url-chris-bapin.herokuapp.com/";
+let local = "http://localhost:3000/";
 
 // Create url
 router.post("/create_url/", async (req, res) => {
@@ -15,7 +17,7 @@ router.post("/create_url/", async (req, res) => {
     const url = new Url({
       longUrl: req.body.longUrl,
       shortUrl: salt,
-      baseShortUrl: "http://localhost:3000/" + salt,
+      baseShortUrl: deploy + salt,
       visit: req.body.visit,
       salt: salt,
     });
