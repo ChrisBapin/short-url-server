@@ -49,7 +49,6 @@ ps. I recommend to install Postman to improve the API development
 Built With
 
 - JavaScript
-- Node.js
-- Express.js
-- Postman -> Improves API development
-- mongoose
+- [Express.js](https://expressjs.com/fr/guide/routing.html)
+- [Postman](https://www.getpostman.com/) -> Improves API development
+- [mongoose](https://mongoosejs.com/)
