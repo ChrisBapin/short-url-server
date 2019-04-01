@@ -15,7 +15,6 @@ const Url = mongoose.model("Url", {
     type: String,
     default: 0,
   },
-  hash: String,
   salt: String,
 });
 
